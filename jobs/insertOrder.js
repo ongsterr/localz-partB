@@ -1,8 +1,6 @@
 const fs = require('fs');
 
-require('../models/Customer');
 const request = require('../api/order');
-const parseCSV = require('../utils/csvProcessor');
 const { insert, connect, disconnect } = require('../database/methods');
 
 const insertOrder = (url, path, process) => {
@@ -25,7 +23,4 @@ const insertOrder = (url, path, process) => {
   });
 };
 
-const url = 'http://127.0.0.1:5500/PartB/utils/sample.csv';
-const file = './downloads/download.csv';
-
-insertOrder(url, file, parseCSV);
+module.exports = insertOrder;
