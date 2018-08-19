@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Order = require('../models/Order');
+require('../models/Customer');
 const Customer = mongoose.model('Customer');
 
 const db = {
@@ -10,7 +11,7 @@ const db = {
     }).exec();
 
     if (customer) {
-      Order.create(order);
+      await Order.create(order);
     }
   },
   connect: () => {
