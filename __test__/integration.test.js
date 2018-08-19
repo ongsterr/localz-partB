@@ -6,8 +6,12 @@ const { insert } = require('../database/methods');
 const Order = require('./factory');
 const CustomerModel = require('../models/Customer');
 const OrderModel = require('../models/Order');
+const insertOrder = require('../jobs/insertOrder');
 
 describe('Testing batch order insert job', () => {
+  const testUrl = 'http://127.0.0.1:5500/PartB/__test__/sample.csv';
+  const destFile = __dirname + '/download.csv';
+
   beforeAll(() => {
     const testDb = 'mongodb://localhost:27017/localztests';
     mongoose.connect(testDb);
@@ -19,7 +23,6 @@ describe('Testing batch order insert job', () => {
 
   describe('Test http call to get csv file', () => {
     it('should get back status 200', async () => {
-      const testUrl = 'http://127.0.0.1:5500/PartB/__test__/sample.csv';
       const response = await request.order(testUrl);
 
       expect(response.status).toBe(200);
@@ -32,7 +35,7 @@ describe('Testing batch order insert job', () => {
       const result = await parseCSV(testCSV, () => {});
 
       expect(typeof result).toBe('object');
-      expect(result.length).toEqual(100);
+      expect(result.length).toEqual(15);
     });
   });
 
@@ -74,6 +77,16 @@ describe('Testing batch order insert job', () => {
 
       const orders = await OrderModel.find().exec();
       expect(orders.length).toEqual(10);
+    });
+  });
+
+  describe('Test all the functions together with the insertJob function', () => {
+    it('should save all orders with customer ID into db', async () => {
+      const response = await insertOrder(testUrl, destFile, parseCSV);
+      const orders = await OrderModel.find().exec();
+
+      expect(typeof response).toBe('object');
+      expect(orders.length).toEqual(15);
     });
   });
 });
