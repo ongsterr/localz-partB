@@ -4,7 +4,7 @@
   "description": "Part B of localz coding challenge",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles",
     "serve": "nodemon app.js"
   },
   "author": "chrisongg",
@@ -16,6 +16,9 @@
     "mongoose": "^5.2.9"
   },
   "devDependencies": {
-    "nodemon": "^1.18.3"
+    "faker": "^4.1.0",
+    "jest": "^23.5.0",
+    "nodemon": "^1.18.3",
+    "rosie": "^2.0.1"
   }
 }
